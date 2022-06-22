@@ -6,19 +6,12 @@ PUR = "\27[0;4m"
 sfpath = io.open("/proc/meminfo", "r")
 sf = sfpath:read("*a")
 
-TotStr = string.match(sf, "MemTotal:.-kB")
-FreStr = string.match(sf, "MemFree:.-kB")
-AvaStr = string.match(sf, "MemAvailable:.-kB")
-BufStr = string.match(sf, "Buffers:.-kB")
-CacStr = string.match(sf, "Cached:.-kB")
-SlaStr = string.match(sf, "Slab:.-kB")
-
-TotF = string.match(TotStr, "%d[%d.,]*") / 976.5625
-FreF = string.match(FreStr, "%d[%d.,]*") / 976.5625
-AvaF = string.match(AvaStr, "%d[%d.,]*") / 976.5625
-BufF = string.match(BufStr, "%d[%d.,]*") / 976.5625
-CacF = string.match(CacStr, "%d[%d.,]*") / 976.5625
-SlaF = string.match(SlaStr, "%d[%d.,]*") / 976.5625
+TotF = string.match(sf, "MemTotal:%s-(%d+) kB") / 976.5625
+FreF = string.match(sf, "MemFree:%s-(%d+) kB") / 976.5625
+AvaF = string.match(sf, "MemAvailable:%s-(%d+) kB") / 976.5625
+BufF = string.match(sf, "Buffers:%s-(%d+) kB") / 976.5625
+CacF = string.match(sf, "Cached:%s-(%d+) kB") / 976.5625
+SlaF = string.match(sf, "Slab:%s-(%d+) kB") / 976.5625
 
 UseF = TotF - FreF - BufF - CacF - SlaF
 rAvaF = TotF - UseF
