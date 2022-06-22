@@ -1,23 +1,25 @@
 #!/bin/sh
-# POSIX shell + awk only
+# POSIX shell + awk
 # Tested on dash 0.5.11.5
 
 clr_UL='\033[4m'
 clr_NC='\033[0m'
 SF=/proc/meminfo
 
-TOT=$((($(awk '$1 ~ /MemTotal:/ { print $2;exit }' $SF)*1024)/1000000))
-FRE=$((($(awk '$1 ~ /MemFree:/ { print $2;exit }' $SF)*1024)/1000000))
-AVA=$((($(awk '$1 ~ /MemAvailable:/ { print $2;exit }' $SF)*1024)/1000000))
-BUF=$((($(awk '$1 ~ /Buffers:/ { print $2;exit }' $SF)*1024)/1000000))
-CAC=$((($(awk '$1 ~ /Cached:/ { print $2;exit }' $SF)*1024)/1000000))
-SLA=$((($(awk '$1 ~ /Slab:/ { print $2;exit }' $SF)*1024)/1000000))
+TOT=$((($(awk '$1 ~ /MemTotal:/ {print $2;exit}' $SF)*1024)/1000000))
+FRE=$((($(awk '$1 ~ /MemFree:/ {print $2;exit}' $SF)*1024)/1000000))
+AVA=$((($(awk '$1 ~ /MemAvailable:/ {print $2;exit}' $SF)*1024)/1000000))
+BUF=$((($(awk '$1 ~ /Buffers:/ {print $2;exit}' $SF)*1024)/1000000))
+CAC=$((($(awk '$1 ~ /Cached:/ {print $2;exit}' $SF)*1024)/1000000))
+SLA=$((($(awk '$1 ~ /Slab:/ {print $2;exit}' $SF)*1024)/1000000))
 USE=$((TOT-FRE-BUF-CAC-SLA))
+rAVA=$((TOT-USE)) # r = Real
+pUSE=$((TOT-AVA)) # p = Passive
 
 printf "╚╚╚ Live Mem Stats ╝╝╝ Powered by $clr_UL sh $clr_NC
 Total:               $TOT mB
-Available:           $AVA mB
+Available:           $rAVA mB
 Used (Active):       $USE mB
-Used (inc. Cache):   $CAC mB\n"
+Used (inc. Cache):   $pUSE mB\n"
 
-exit 0 
+exit 0
